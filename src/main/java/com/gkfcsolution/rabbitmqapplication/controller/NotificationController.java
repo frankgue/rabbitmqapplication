@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gkfcsolution.rabbitmqapplication.entity.Notification;
@@ -12,7 +13,6 @@ import com.gkfcsolution.rabbitmqapplication.repository.NotificationRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 
@@ -37,8 +37,8 @@ public class NotificationController {
         return ResponseEntity.ok(count);
     }
 
-    @GetMapping("/getallnotificationsbyrecipient")
-    public ResponseEntity<List<Notification>> getAllNotificationByRecipient(@RequestParam String recipient) {
+    @GetMapping("/getNotificationsByRecipient")
+    public ResponseEntity<List<Notification>> getNotificationsByRecipient(@RequestParam String recipient) {
         List<Notification> notifications = notificationRepository.findByRecipientOrderByCreatedAtDesc(recipient);
         log.info("Fetched {} notifications for recipient: {}", notifications.size(), recipient);
         return ResponseEntity.ok(notifications);
