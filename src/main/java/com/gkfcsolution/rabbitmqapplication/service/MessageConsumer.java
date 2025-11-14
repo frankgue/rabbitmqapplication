@@ -4,6 +4,7 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
 
 import com.gkfcsolution.rabbitmqapplication.config.RabbitMQConfig;
+import com.gkfcsolution.rabbitmqapplication.entity.Message;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -12,14 +13,14 @@ import lombok.extern.slf4j.Slf4j;
 public class MessageConsumer {
 
     @RabbitListener(queues= RabbitMQConfig.EMAIL_NOTIFICATION_QUEUE)
-    public void handleEmailNotification(String message) {
-        log.info("Received email notification: {}", message);
+    public void handleEmailNotification(Message message) {
+        log.info("Received email notification with Id: {}, Recipient: {}, Subject: {}", message.getId(), message.getRecipient(), message.getSubject());
         // Process the email notification
     }
 
     @RabbitListener(queues= RabbitMQConfig.SMS_NOTIFICATION_QUEUE)
-    public void handleSmsNotification(String message) {
-        log.info("Received SMS notification: {}", message);
+    public void handleSmsNotification(Message message) {
+        log.info("Received SMS notification with Id: {}, Recipient: {}, Content: {}", message.getId(), message.getRecipient(), message.getContent());
         // Process the SMS notification
     }
 }
