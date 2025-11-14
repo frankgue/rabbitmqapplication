@@ -45,4 +45,31 @@ public class MessageProducer {
                 
     }
 
+     public String sendSmsNotification(String recipient, String content) {
+        String messageId = java.util.UUID.randomUUID().toString();
+        log.info("Producing sms notification message: ID={}, recipient={}",
+                messageId, recipient);
+        // Logic to send message to RabbitMQ would go here
+        Message message = Message.builder()
+                .id(messageId)
+                .type("SMS")
+                .recipient(recipient)
+                .content(content)
+                .subject("SMS Notification")
+                .priority("MEDIUM") // Default priority for SMS
+                .timestamp(LocalDateTime.now())
+                .build();
+
+                try {
+                        log.info("Sending sms notification message to RabbitMQ  with ID: {}", messageId);
+                        rabbitTemplate.convertAndSend(RabbitMQConfig.APP_EXCHANGE, RabbitMQConfig.SMS_NOTIFICATION_ROUTING_KEY, message);
+                        log.info("Sms notification message sent successfully with ID: {}", messageId);
+                        return messageId;
+                } catch (Exception e) {
+                        log.error("Failed to send sms notification message with ID: {}. Error: {}", messageId, e.getMessage());
+                        throw new RuntimeException("Failed to send sms notification message", e);
+                }
+                
+    }
+
 }
